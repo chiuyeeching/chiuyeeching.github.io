@@ -1,0 +1,1233 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+    <title>echarts</title>
+    <script type="text/javascript" src="echarts.min.js"></script>
+    <script type="text/javascript" src="china.js"></script>
+</head>
+
+<body>
+    <style class="next-head">
+        /*! normalize.css v7.0.0 | MIT License | github.com/necolas/normalize.css */
+        
+        html {
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            line-height: 1.15
+        }
+        
+        #viz1540214181579 {
+            margin: 0 auto;
+        }
+        
+        #main1 {
+            margin: 0 auto;
+        }
+        
+        #main2 {
+            margin: 0 auto;
+        }
+        
+        #main3 {
+            margin: 0 auto;
+        }
+        
+        #main4 {
+            margin: 0 auto;
+        }
+        
+        #bigtitle {
+            margin: 0 auto;
+        }
+        
+        #word1 {
+            margin: 0 auto;
+        }
+        
+        article,
+        aside,
+        footer,
+        header,
+        nav,
+        section {
+            display: block
+        }
+    </style>
+
+
+
+
+
+
+
+
+    <div style="height:1080px">
+
+        <div style="height:480px">
+
+            <div style="height:70px"></div>
+
+            <div id="bigtitle" style="width:800px;height:100px"><span style="font-size:50px">—— 隐形危害 , 数说噪声污染 ——</span></div>
+
+            <div id="word1" style="width:700px;height:300px">
+                <p style="font-size:14px;letter-spacing: 1px;line-height: 30px;">　　在过去五年（2013年-2017年）全国城市各功能区声环境监测达标调查中可见，我国城市各功能区的声环境总体达标状况只能算“勉强及格”。其中，0类、4a类与4b类功能区夜间达标率较低。</p>
+                <p style="font-size:12px;line-height: 22px;color: #97a1ad"> 　　0类：指康复疗养区等特别需要安静的区域。<br> 　　1类：指以居民住宅、医疗卫生、 文化教育、科研设计、行政办公为主要功能，需要保持安静的区域。<br> 　　2类：指以商业金融、集市贸易为主 要功能，或者居住、商业、工业混杂，需要维护住宅安静的区域。<br> 　　3类：指以工业生产、仓储物流为主要 功能，需要防止工业噪声对周围环境产生严重影响的区域。<br> 　　4类：指交通干线两侧一定距离之内，需要防止交通噪声对周围环境产生严重影响的区域，包括4a类和4b类两种类型。<br>　　（注：2013年尚未进行分类，统一为4类）<br>　　4a类为高速公路、一级公路、二级公路、城市
+                    快速路、城市主干路、城市次干路、城市轨道交通（地面段）、内河航道两侧区域；4b类为铁路干线两侧区域。
+                </p>
+                </p>
+            </div>
+
+
+        </div>
+
+        <div id="main1" style="width: 900px;height:500px;"></div>
+        <script type="text/javascript">
+            var myChart = echarts.init(document.getElementById('main1'));
+            var dataMap = {};
+
+            function dataFormatter(obj) {
+                var pList = ['0类', '1类', '2类', '3类', '4a类', '4b类'];
+                var temp;
+                for (var year = 2013; year <= 2017; year++) {
+                    var max = 0;
+                    var sum = 0;
+                    temp = obj[year];
+                    for (var i = 0, l = temp.length; i < l; i++) {
+                        max = Math.max(max, temp[i]);
+                        sum += temp[i];
+                        obj[year][i] = {
+                            name: pList[i],
+                            value: temp[i]
+                        }
+                    }
+                    obj[year + 'max'] = Math.floor(max / 100) * 100;
+                    obj[year + 'sum'] = sum;
+                }
+                return obj;
+            }
+
+            dataMap.dataDAY = dataFormatter({
+                //max : 100,
+                2013: [66, 87, 90.8, 97.3, 91.9, 0],
+                2014: [77, 87.2, 91.4, 96.5, 91.7, 98.5],
+                2015: [80.7, 87.3, 93, 97.3, 93.3, 93.8],
+                2016: [78.6, 87.4, 92.5, 97.2, 92.6, 95.3],
+                2017: [76.6, 86.7, 92.1, 96.7, 73.3, 97.7]
+            });
+
+            dataMap.dataNIGHT = dataFormatter({
+                //max : 100,
+                2013: [46.6, 71.1, 80.9, 88, 47.6, 0],
+                2014: [61.1, 72, 79.8, 86.8, 49.4, 35.3],
+                2015: [64.9, 74.7, 83.3, 88.1, 50.7, 64.1],
+                2016: [57.3, 72.8, 83.4, 88.3, 50.5, 72.1],
+                2017: [58.3, 73.3, 82.5, 86.9, 52, 71.6]
+            });
+            option = {
+                baseOption: {
+                    timeline: {
+                        // y: 0,
+                        axisType: 'category',
+                        // realtime: false,
+                        // loop: false,
+                        autoPlay: true,
+                        // currentIndex: 2,
+                        playInterval: 1000,
+                        // controlStyle: {
+                        //     position: 'left'
+                        // },
+                        data: ['2013',
+                            '2014', {
+                                value: '2015',
+                                tooltip: {
+                                    formatter: '{b} 4b类功能区夜间达标率大幅提升'
+                                },
+                                symbol: 'diamond',
+                                symbolSize: 16
+                            }, '2016', {
+                                value: '2017',
+                                tooltip: {
+                                    formatter: '{b} 4a类功能区昼间达标率骤减'
+                                },
+                                symbol: 'diamond',
+                                symbolSize: 16
+                            },
+
+                        ],
+                        label: {
+                            formatter: function(s) {
+                                return (new Date(s)).getFullYear();
+                            }
+                        }
+                    },
+                    title: {
+                        subtext: '数据来自国家统计局'
+                    },
+                    tooltip: {},
+                    legend: {
+                        x: 'right',
+                        data: ['昼间达标率', '夜间达标率'],
+                        selected: {
+
+                        }
+                    },
+                    calculable: true,
+                    grid: {
+                        top: 80,
+                        bottom: 100
+                    },
+                    xAxis: [{
+                        'type': 'category',
+                        'axisLabel': {
+                            'interval': 0
+                        },
+                        'data': [
+                            '0类', '1类', '2类', '3类', '4a类', '4b类'
+                        ],
+                        splitLine: {
+                            show: false
+                        }
+                    }],
+                    yAxis: [{
+                        type: 'value',
+                        name: '达标率/%',
+                        // max: 100
+                        max: 100
+                    }],
+                    series: [{
+                            name: '昼间达标率',
+                            type: 'bar'
+                        }, {
+                            name: '夜间达标率',
+                            type: 'bar'
+                        },
+
+                        {
+                            name: '四类噪声占比',
+                            type: 'pie',
+                            center: ['24.5%', '12.7%', '4.7%'],
+                            radius: '28%'
+                        }
+                    ]
+                },
+                options: [{
+                        title: {
+                            text: '2013年全国城市各类功能区监测点次达标情况'
+                        },
+                        series: [{
+                                data: dataMap.dataDAY['2013']
+                            }, {
+                                data: dataMap.dataNIGHT['2013']
+                            },
+
+                        ]
+                    }, {
+                        title: {
+                            text: '2014年全国城市各类功能区监测点次达标情况'
+                        },
+                        series: [{
+                                data: dataMap.dataDAY['2014']
+                            }, {
+                                data: dataMap.dataNIGHT['2014']
+                            },
+
+                        ]
+                    }, {
+                        title: {
+                            text: '2015年全国城市各类功能区监测点次达标情况'
+                        },
+                        series: [{
+                                data: dataMap.dataDAY['2015']
+                            }, {
+                                data: dataMap.dataNIGHT['2015']
+                            },
+
+                        ]
+                    }, {
+                        title: {
+                            text: '2016年全国城市各类功能区监测点次达标情况'
+                        },
+                        series: [{
+                                data: dataMap.dataDAY['2016']
+                            }, {
+                                data: dataMap.dataNIGHT['2016']
+                            },
+
+                        ]
+                    }, {
+                        title: {
+                            text: '2017年全国城市各类功能区监测点次达标情况'
+                        },
+                        series: [{
+                                data: dataMap.dataDAY['2017']
+                            }, {
+                                data: dataMap.dataNIGHT['2017']
+                            },
+
+                        ]
+                    },
+
+                ]
+            };
+            myChart.setOption(option);
+        </script>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div style="height:1080px;background-color:#404a59 ;">
+
+        <div style="height:280px">
+
+            <div style="width:700px;height:80px"></div>
+
+            <div id="word1" style="width:700px;height:150px">
+                <p style="font-size:14px;letter-spacing: 1px;line-height: 30px;color: #f7f8fa">　　2017年，全国共有323个地级及以上城市报送了昼间区域声环境质量监测数据。全国城市昼间区域声环境质量等效声级平均值为54dB(A)。这也说明了目前我国昼间还是处在一个相对优良的声环境当中。
+                    <BR>　　值得一提的是，西南部的拉萨是全国唯一的环境噪声质量水平为一级的城市，而东北部的哈尔滨则是昼间最吵闹的省会城市。</p>
+            </div>
+        </div>
+
+
+        <div id="main2" style="width: 1200px;height:800px;"></div>
+        <script type="text/javascript">
+            var myChart = echarts.init(document.getElementById('main2'));
+            var data = [{
+                    name: "上海",
+                    value: 55.7
+                }, {
+                    name: "海口",
+                    value: 56
+                }, {
+                    name: "合肥",
+                    value: 54.4
+                }, {
+                    name: "南京",
+                    value: 53.6
+                }, {
+                    name: "杭州",
+                    value: 55.2
+                }, {
+                    name: "广州",
+                    value: 55.3
+                }, {
+                    name: "福州",
+                    value: 57.5
+                }, {
+                    name: "南宁",
+                    value: 56.1
+                }, {
+                    name: "郑州",
+                    value: 56
+                }, {
+                    name: "武汉",
+                    value: 56.1
+                }, {
+                    name: "长沙",
+                    value: 53.3
+                }, {
+                    name: "南昌",
+                    value: 53.6
+                }, {
+                    name: "北京",
+                    value: 53.2
+                }, {
+                    name: "长春",
+                    value: 56.2
+                }, {
+                    name: "沈阳",
+                    value: 54.8
+                }, {
+                    name: "哈尔滨",
+                    value: 59.3
+                }, {
+                    name: "天津",
+                    value: 53.9
+                }, {
+                    name: "济南",
+                    value: 53.7
+                }, {
+                    name: "太原",
+                    value: 53.2
+                }, {
+                    name: "石家庄",
+                    value: 54.4
+                }, {
+                    name: "西安",
+                    value: 56.5
+                }, {
+                    name: "成都",
+                    value: 54.3
+                }, {
+                    name: "重庆",
+                    value: 53.1
+                }, {
+                    name: "昆明",
+                    value: 53.2
+                }, {
+                    name: "拉萨",
+                    value: 48.2
+                }, {
+                    name: "银川",
+                    value: 53
+                }, {
+                    name: "西宁",
+                    value: 53.8
+                }, {
+                    name: "兰州",
+                    value: 53.9
+                }, {
+                    name: "呼和浩特",
+                    value: 54
+                }, {
+                    name: "乌鲁木齐",
+                    value: 54.4
+                }, {
+                    name: "贵阳",
+                    value: 58.8
+                },
+
+
+            ];
+
+            var geoCoordMap = {
+                "上海": [121.48, 31.22],
+                "海口": [110.35, 20.02],
+                "合肥": [117.27, 31.86],
+                "南京": [118.78, 32.04],
+                "杭州": [120.19, 30.26],
+                "广州": [113.23, 23.16],
+                "福州": [119.3, 26.08],
+                "南宁": [108.33, 22.84],
+                "郑州": [113.65, 34.76],
+                "武汉": [114.31, 30.52],
+                "长沙": [113, 28.21],
+                "南昌": [115.89, 28.68],
+                "北京": [116.46, 39.92],
+                "长春": [125.35, 43.88],
+                "沈阳": [123.38, 41.8],
+                "哈尔滨": [126.63, 45.75],
+                "天津": [117.2, 39.13],
+                "济南": [117, 36.65],
+                "太原": [112.53, 37.87],
+                "石家庄": [114.48, 38.03],
+                "西安": [108.95, 34.27],
+                "成都": [104.06, 30.67],
+                "重庆": [106.54, 29.59],
+                "昆明": [102.73, 25.04],
+                "拉萨": [91.11, 29.97],
+                "银川": [106.27, 38.47],
+                "西宁": [101.74, 36.56],
+                "兰州": [103.73, 36.03],
+                "呼和浩特": [111.65, 40.82],
+                "乌鲁木齐": [87.68, 43.77],
+                "贵阳": [106.71, 26.57],
+            };
+
+            var convertData = function(data) {
+                var res = [];
+                for (var i = 0; i < data.length; i++) {
+                    var geoCoord = geoCoordMap[data[i].name];
+                    if (geoCoord) {
+                        res.push({
+                            name: data[i].name,
+                            value: geoCoord.concat(data[i].value)
+                        });
+                    }
+                }
+                return res;
+            };
+
+            var convertedData = [
+                convertData(data),
+                convertData(data.sort(function(a, b) {
+                    return b.value - a.value;
+                }).slice(0, 6))
+            ];
+            data.sort(function(a, b) {
+                return a.value - b.value;
+            })
+
+            var selectedItems = [];
+            var categoryData = [];
+            var barData = [];
+            //   var maxBar = 30;
+            var sum = 0;
+            var count = data.length;
+            for (var i = 0; i < data.length; i++) {
+                categoryData.push(data[i].name);
+                barData.push(data[i].value);
+                sum += data[i].value;
+            }
+            console.log(categoryData);
+            console.log(sum + "   " + count)
+            option = {
+                backgroundColor: '#404a59',
+                animation: true,
+                animationDuration: 1000,
+                animationEasing: 'cubicInOut',
+                animationDurationUpdate: 1000,
+                animationEasingUpdate: 'cubicInOut',
+                title: [{
+                    text: '2017年直辖市和省会城市区域声环境质量昼间平均等效声级',
+                    subtext: 'data from 《2018中国环境噪声污染防治报告》',
+                    sublink: 'http://dqhj.mee.gov.cn/dqmyyzshjgl/zshjgl/201808/t20180803_447713.shtml',
+                    left: 'center',
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }, {
+                    id: 'statistic',
+                    text: count ? '平均: ' + parseInt((sum / count).toFixed(4)) : '',
+                    right: 120,
+                    top: 40,
+                    width: 100,
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: 16
+                    }
+                }],
+                toolbox: {
+                    iconStyle: {
+                        normal: {
+                            borderColor: '#fff'
+                        },
+                        emphasis: {
+                            borderColor: '#b1e4ff'
+                        }
+                    },
+                    feature: {
+                        dataZoom: {},
+                        brush: {
+                            type: ['rect', 'polygon', 'clear']
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+                    }
+                },
+                brush: {
+                    outOfBrush: {
+                        color: '#abc'
+                    },
+                    brushStyle: {
+                        borderWidth: 2,
+                        color: 'rgba(0,0,0,0.2)',
+                        borderColor: 'rgba(0,0,0,0.5)',
+                    },
+                    seriesIndex: [0, 1],
+                    throttleType: 'debounce',
+                    throttleDelay: 300,
+                    geoIndex: 0
+                },
+                geo: {
+                    map: 'china',
+                    left: '10',
+                    right: '35%',
+                    center: [117.98561551896913, 31.205000490896193],
+                    zoom: 1.5,
+                    label: {
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    roam: true,
+                    itemStyle: {
+                        normal: {
+                            areaColor: '#323c48',
+                            borderColor: '#111'
+                        },
+                        emphasis: {
+                            areaColor: '#2a333d'
+                        }
+                    }
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                grid: {
+                    right: 40,
+                    top: 100,
+                    bottom: 40,
+                    width: '30%'
+                },
+                xAxis: {
+                    type: 'value',
+                    scale: true,
+                    position: 'top',
+                    boundaryGap: false,
+                    splitLine: {
+                        show: false
+                    },
+                    axisLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        margin: 2,
+                        textStyle: {
+                            color: '#aaa'
+                        }
+                    },
+                },
+                yAxis: {
+                    type: 'category',
+                    //  name: 'TOP 20',
+                    nameGap: 16,
+                    axisLine: {
+                        show: true,
+                        lineStyle: {
+                            color: '#ddd'
+                        }
+                    },
+                    axisTick: {
+                        show: false,
+                        lineStyle: {
+                            color: '#ddd'
+                        }
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        textStyle: {
+                            color: '#ddd'
+                        }
+                    },
+                    data: categoryData
+                },
+                series: [{
+                    // name: 'pm2.5',
+                    type: 'scatter',
+                    coordinateSystem: 'geo',
+                    data: convertedData[0],
+                    symbolSize: function(val) {
+                        return Math.max(val[2] / 300, 8);
+                    },
+                    label: {
+                        normal: {
+                            formatter: '{b}',
+                            position: 'right',
+                            show: false
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#FF8C00',
+                            position: 'right',
+                            show: true
+                        }
+                    }
+                }, {
+                    //  name: 'Top 5',
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    data: convertedData[0],
+                    symbolSize: function(val) {
+                        return Math.max(val[2] / 500, 8);
+                    },
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    hoverAnimation: true,
+                    label: {
+                        normal: {
+                            formatter: '{b}',
+                            position: 'right',
+                            show: true
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#f4e925',
+                            shadowBlur: 50,
+                            shadowColor: '#EE0000'
+                        }
+                    },
+                    zlevel: 1
+                }, {
+                    id: 'bar',
+                    zlevel: 2,
+                    type: 'bar',
+                    symbol: 'none',
+                    itemStyle: {
+                        normal: {
+                            color: '#ddb926'
+                        }
+                    },
+
+                    data: data
+                }]
+            };
+
+
+
+            function renderBrushed(params) {
+                var mainSeries = params.batch[0].selected[0];
+
+                var selectedItems = [];
+                var categoryData = [];
+                var barData = [];
+                var maxBar = 30;
+                var sum = 0;
+                var count = 0;
+
+                for (var i = 0; i < mainSeries.dataIndex.length; i++) {
+                    var rawIndex = mainSeries.dataIndex[i];
+                    var dataItem = convertedData[0][rawIndex];
+                    var pmValue = dataItem.value[2];
+
+                    sum += pmValue;
+                    count++;
+
+                    selectedItems.push(dataItem);
+                }
+
+                selectedItems.sort(function(a, b) {
+                    //   return b.value[2] - a.value[2];
+                    return a.value - b.value;
+                });
+
+                for (var i = 0; i < Math.min(selectedItems.length, maxBar); i++) {
+                    categoryData.push(selectedItems[i].name);
+                    barData.push(selectedItems[i].value[2]);
+                }
+
+                this.setOption({
+                    yAxis: {
+                        data: categoryData
+                    },
+                    xAxis: {
+                        axisLabel: {
+                            show: !!count
+                        }
+                    },
+                    title: {
+                        id: 'statistic',
+                        text: count ? '平均: ' + (sum / count).toFixed(4) : ''
+                    },
+                    series: {
+                        id: 'bar',
+                        //        sort:'descending',
+                        data: barData
+                    }
+                });
+            }
+            myChart.setOption(option);
+        </script>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div style="height:1080px">
+
+        <div style="height:350px">
+
+
+            <div style="width:700px;height:100px"></div>
+
+            <div id="word1" style="width:700px;height:180px">
+                <p style="font-size:14px;letter-spacing: 1px;line-height: 30px">　　噪声总是无处不在，每年政府都积极投入到噪声污染的治理工作中，但是居民还是处于一个饱受噪声滋扰的生活环境中 ，各类噪声投诉也纷纷而至。<br> 　　2014~2016年的数据统计中，四类噪声实际分布情况显示，社会生活噪声占比逐年上升，大致占了四类噪声分布情况的60%以上，而噪声投诉情况则显示社会生活噪声投诉呈下降趋势，并且在2016年低于逐年上涨的施工噪声投诉占比。另外，交通噪声在实际噪声分布占比中超过20%，但交通噪声的投诉占比均为每年噪声投诉最小。由此可见，人们更多身在社会生活噪声与交通噪声中，却日趋习以为常，心理与生理受影响预期低于实际的影响，需要引起人们的警觉。
+                </p>
+            </div>
+
+        </div>
+
+        <div class='tableauPlaceholder' id='viz1540214181579' style='position: relative'><noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;1-&#47;1-_31&#47;1_1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='1-_31&#47;1_1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;1-&#47;1-_31&#47;1_1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /></object></div>
+        <script type='text/javascript'>
+            var divElement = document.getElementById('viz1540214181579');
+            var vizElement = divElement.getElementsByTagName('object')[0];
+            vizElement.style.width = '1000px';
+            vizElement.style.height = '827px';
+            var scriptElement = document.createElement('script');
+            scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+            vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        </script>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div style="height:1080px;background-color:#1c2e40">
+
+        <div style="height:320px">
+
+            <div style="width:700px;height:115px"></div>
+
+            <div id="word1" style="width:700px;height:150px">
+                <p style="font-size:14px;letter-spacing: 1px;line-height: 30px;color: #f7f8fa">　　据近五年的噪声投诉情况来看，每年的噪声投诉案例高居不下，噪声投诉占环保投诉总量比例总体上最少也逾四成，可谓之环保投诉的“大头”，这反映了两种情况，其一是公民的权利意识有所提高，其二是噪声对我们生活的影响越来越严重。其中，虽然道路交通噪声的投诉占比较小，但总量依然巨大，交通噪声对我们造成的影响不容忽视。
+                </p>
+            </div>
+        </div>
+
+        <div id="main3" style="width: 1200px;height:700px;"></div>
+        <script type="text/javascript">
+            var myChart = echarts.init(document.getElementById('main3'));
+
+
+
+            option = {
+                "title": {
+                    "text": "近五年噪声投诉情况",
+                    "left": "center",
+                    "y": "10",
+                    "textStyle": {
+                        "color": "#fff"
+                    }
+                },
+                "backgroundColor": "#1c2e40",
+                "color": "#384757",
+                "tooltip": {
+                    "trigger": "axis",
+                    "axisPointer": {
+                        "type": "cross",
+                        "crossStyle": {
+                            "color": "#384757"
+                        }
+                    }
+                },
+                "legend": {
+                    "data": [{
+                        "name": "噪声投诉总数",
+                        "icon": "circle",
+                        "textStyle": {
+                            "color": "#7d838b"
+                        }
+                    }, {
+                        "name": "交通噪声投诉总数",
+                        "icon": "circle",
+                        "textStyle": {
+                            "color": "#7d838b"
+                        }
+                    }, {
+                        "name": "噪声投诉占环保投诉总量比例",
+                        "icon": "circle",
+                        "textStyle": {
+                            "color": "#7d838b"
+                        }
+                    }],
+                    "top": "10%",
+                    "textStyle": {
+                        "color": "#fff"
+                    }
+                },
+                "xAxis": [{
+                    "type": "category",
+                    "data": [
+                        "2013年",
+                        "2014年",
+                        "2015年",
+                        "2016年",
+                        "2017年",
+
+                    ],
+                    "axisPointer": {
+                        "type": "shadow"
+                    },
+                    "axisLabel": {
+                        "show": true,
+                        "textStyle": {
+                            "color": "#7d838b"
+                        }
+                    }
+                }],
+                "yAxis": [{
+                    "type": "value",
+                    "name": "投诉总数/件",
+                    "nameTextStyle": {
+                        "color": "#7d838b"
+                    },
+                    "min": 0,
+                    "max": 600000,
+                    "interval": 100000,
+                    "axisLabel": {
+                        "show": true,
+                        "textStyle": {
+                            "color": "#7d838b"
+                        }
+                    },
+                    "axisLine": {
+                        "show": true
+                    },
+                    "splitLine": {
+                        "lineStyle": {
+                            "color": "#7d838b"
+                        }
+                    }
+                }, {
+                    "type": "value",
+                    "name": "噪声投诉占环保投诉总量比例/%",
+                    "show": true,
+                    "axisLabel": {
+                        "show": true,
+                        "textStyle": {
+                            "color": "#7d838b"
+                        }
+                    }
+                }],
+                "grid": {
+                    "top": "20%"
+                },
+                "series": [{
+                    "name": "噪声投诉总数",
+                    "type": "bar",
+                    "data": [
+                        284000,
+                        457000,
+                        354000,
+                        522000,
+                        550000
+
+                    ],
+                    "barWidth": "auto",
+                    "itemStyle": {
+                        "normal": {
+                            "color": {
+                                "type": "linear",
+                                "x": 0,
+                                "y": 0,
+                                "x2": 0,
+                                "y2": 1,
+                                "colorStops": [{
+                                    "offset": 0,
+                                    "color": "rgba(255,37,117,0.7)"
+                                }, {
+                                    "offset": 0.5,
+                                    "color": "rgba(0,133,245,0.7)"
+                                }, {
+                                    "offset": 1,
+                                    "color": "rgba(0,133,245,0.3)"
+                                }],
+                                "globalCoord": false
+                            }
+                        }
+                    }
+                }, {
+                    "name": "交通噪声投诉总数",
+                    "type": "bar",
+                    "data": [
+                        32092,
+                        9140,
+                        42480,
+                        15660,
+                        23100
+                    ],
+                    "barWidth": "auto",
+                    "itemStyle": {
+                        "normal": {
+                            "color": {
+                                "type": "linear",
+                                "x": 0,
+                                "y": 0,
+                                "x2": 0,
+                                "y2": 1,
+                                "colorStops": [{
+                                    "offset": 0,
+                                    "color": "rgba(255,37,117,0.7)"
+                                }, {
+                                    "offset": 0.5,
+                                    "color": "rgba(0,255,252,0.7)"
+                                }, {
+                                    "offset": 1,
+                                    "color": "rgba(0,255,252,0.3)"
+                                }],
+                                "globalCoord": false
+                            }
+                        }
+                    },
+                    "barGap": "0"
+                }, {
+                    "name": "噪声投诉占环保投诉总量比例",
+                    "type": "line",
+                    "yAxisIndex": 1,
+                    "data": [
+                        39.2,
+                        56.4,
+                        35.3,
+                        43.9,
+                        42.9,
+
+                    ],
+                    "itemStyle": {
+                        "normal": {
+                            "color": "#ffaa00"
+                        }
+                    },
+                    "smooth": true
+                }]
+            };
+
+
+
+            myChart.setOption(option);
+        </script>
+    </div>
+
+
+
+
+
+
+
+    <div style="height:1080px;background-color: #f7f8fa">
+
+        <div style="height:300px">
+
+            <div style="width:700px;height:60px"></div>
+
+            <div id="word1" style="width:700px;height:150px">
+                <p style="font-size:14px;letter-spacing: 1px;line-height: 30px">　　随着交通道路的发展和人们生活水平的提高，越来越多的人拥有属于自己的汽车，这也意味着交通噪声会对我们的生活工作都产生更大的影响。
+                    <BR>　　在2016年与2017年各省汽车保有量及其省会城市功能区昼夜噪声达标率中对比发现，宁夏表现最为优异，其次是江苏，其汽车保有量虽大，但省会南京的昼夜噪声达标率较好。河南郑州达标率虽较差，但在2016-2017年间有了一定提升。而西藏拉萨两年间的噪声达标率却退步明显。石家庄、太原等城市昼间噪声状况堪忧。
+                    <p style="font-size:12px;line-height: 22px;color: #97a1ad">　　　　　　　　　　　　　　　　　　 　　　　　　　　　　　　　　　　横轴为昼间达标率，纵轴为夜间达标率。（单位：%）
+                    </p>
+                </p>
+            </div>
+
+        </div>
+
+        <div id="main4" style="width: 1200px;height:750px;"></div>
+        <script type="text/javascript">
+            var myChart = echarts.init(document.getElementById('main4'));
+
+            var data = [
+                [
+                    [100, 50, 5460000, '北京', 2017],
+                    [91.3, 53.8, 2280000, '天津', 2017],
+                    [91.7, 22.9, 9520000, '河北', 2017],
+                    [100, 75, 4110000, '山西', 2017],
+                    [95, 60, 3130000, '内蒙古', 2017],
+                    [96.4, 82.1, 4690000, '辽宁', 2017],
+                    [93.8, 65.6, 2540000, '吉林', 2017],
+                    [66.2, 38.2, 2750000, '黑龙江', 2017],
+                    [93.1, 63.9, 3620000, '上海', 2017],
+                    [97.9, 94.8, 12440000, '江苏', 2017],
+                    [83.7, 65.2, 10800000, '浙江', 2017],
+                    [86.7, 68.3, 4940000, '安徽', 2017],
+                    [93.8, 50, 3970000, '福建', 2017],
+                    [82.5, 55, 2750000, '江西', 2017],
+                    [77.8, 44.4, 12730000, '山东', 2017],
+                    [56.3, 43.8, 8600000, '河南', 2017],
+                    [75, 52.1, 4830000, '湖北', 2017],
+                    [85, 46.7, 4930000, '湖南', 2017],
+                    [65.9, 47.7, 13650000, '广东', 2017],
+                    [85.7, 46.4, 2890000, '广西', 2017],
+                    [100, 62.5, 810000, '海南', 2017],
+                    [88.6, 55.7, 2980000, '重 庆', 2017],
+                    [84.2, 39.5, 7530000, '四川', 2017],
+                    [81.3, 43.8, 2680000, '贵州', 2017],
+                    [100, 71.9, 3700000, '云南', 2017],
+                    [87.5, 50, 170000, '西藏', 2017],
+                    [75, 28.1, 4110000, '陕西', 2017],
+                    [85.7, 53.6, 1750000, '甘肃', 2017],
+                    [70, 35, 610000, '青海', 2017],
+                    [100, 90, 790000, '宁夏', 2017],
+                    [93.3, 66.7, 2020000, '新疆', 2017],
+
+                ],
+                [
+                    [81.3, 43.8, 5300000, '北京', 2016],
+                    [86.3, 57.5, 2740000, '天津', 2016],
+                    [89.6, 35.4, 9300000, '河北', 2016],
+                    [94.4, 72.2, 4240000, '山西', 2016],
+                    [100, 45, 3420000, '内蒙古', 2016],
+                    [92.9, 85.7, 5200000, '辽宁', 2016],
+                    [90.6, 39.1, 2850000, '吉林', 2016],
+                    [70.6, 50, 3230000, '黑龙江', 2016],
+                    [93, 68.8, 2550000, '上海', 2016],
+                    [96.9, 87.5, 10950000, '江苏', 2016],
+                    [84.1, 58, 10120000, '浙江', 2016],
+                    [93.1, 75.9, 4220000, '安徽', 2016],
+                    [98.8, 70, 3860000, '福建', 2016],
+                    [95, 68.8, 2880000, '江西', 2016],
+                    [80.6, 50, 13500000, '山东', 2016],
+                    [50, 31.3, 9690000, '河南', 2016],
+                    [77.1, 43.8, 4220000, '湖北', 2016],
+                    [78.3, 41.7, 4340000, '湖南', 2016],
+                    [63.6, 56.8, 13320000, '广东', 2016],
+                    [89.3, 46.4, 3160000, '广西', 2016],
+                    [100, 62.5, 750000, '海南', 2016],
+                    [84.9, 57, 2370000, '重 庆', 2016],
+                    [79.3, 53.7, 4000000, '四川', 2016],
+                    [100, 31.3, 2440000, '贵州', 2016],
+                    [100, 71.9, 4300000, '云南', 2016],
+                    [100, 87.5, 290000, '西藏', 2016],
+                    [62.5, 31.3, 3850000, '陕西', 2016],
+                    [71.4, 28.6, 1850000, '甘肃', 2016],
+                    [60, 35, 690000, '青海', 2016],
+                    [100, 100, 910000, '宁夏', 2016],
+                    [93.3, 56.7, 2720000, '新疆', 2016],
+                ]
+            ];
+
+            option = {
+                backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [{
+                    offset: 0,
+                    color: '#f7f8fa'
+                }, {
+                    offset: 1,
+                    color: '#f7f8fa'
+                }]),
+                title: {
+                    text: '2016年与2017年各省汽车保有量及其省会城市功能区昼夜噪声达标率'
+                },
+                legend: {
+                    right: 10,
+                    data: ['2017', '2016']
+                },
+                xAxis: {
+                    splitLine: {
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    }
+                },
+                yAxis: {
+                    splitLine: {
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    },
+                    scale: true
+                },
+                series: [{
+                    name: '2017',
+                    data: data[0],
+                    type: 'scatter',
+                    symbolSize: function(data) {
+                        return Math.sqrt(data[2] * 20) / 5e2;
+                    },
+                    label: {
+                        emphasis: {
+                            show: true,
+                            formatter: function(param) {
+                                return param.data[3];
+                            },
+                            position: 'top'
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(120, 36, 50, 0.5)',
+                            shadowOffsetY: 5,
+                            color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                                offset: 0,
+                                color: 'rgb(251, 118, 123)'
+                            }, {
+                                offset: 1,
+                                color: 'rgb(204, 46, 72)'
+                            }])
+                        }
+                    }
+                }, {
+                    name: '2016',
+                    data: data[1],
+                    type: 'scatter',
+                    symbolSize: function(data) {
+                        return Math.sqrt(data[2] * 20) / 5e2;
+                    },
+                    label: {
+                        emphasis: {
+                            show: true,
+                            formatter: function(param) {
+                                return param.data[3];
+                            },
+                            position: 'top'
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(25, 100, 150, 0.5)',
+                            shadowOffsetY: 5,
+                            color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+                                offset: 0,
+                                color: 'rgb(129, 227, 238)'
+                            }, {
+                                offset: 1,
+                                color: 'rgb(25, 183, 207)'
+                            }])
+                        }
+                    }
+                }]
+            };
+
+            myChart.setOption(option);
+        </script>
+    </div>
+
+
+
+
+
+
+
+    <div style="height:1080px;background-image: url(20181022222446.jpg)">
+
+        <div style="width:700px;height:100px"></div>
+
+        <div id="word1" style="width:700px;height:150px">
+            <p style="font-size:14px;letter-spacing: 1px;line-height: 30px;color: #f7f8fa">　　较强的噪声对人的生理与心理会产生不良影响。在日常工作和生活环境中，噪声主要造成听力损失，干扰谈话、思考、休息和睡眠。根据《社会生活环境噪声排放标准》规定，居民区的环境噪音白天不能超过50分贝，夜间则应低于40分贝，特别夜间卧室应控制在35分贝之内。在一项调查中，超7成居民认为，35分贝应该是“安静、轻声絮语、能听到孩子画画时的沙沙声”的环境。
+            </p>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <div style="height:1000px;background-color: whitesmoke">
+
+        <div style="width:700px;height:220px"></div>
+
+        <div id="word1" style="width:850px;height:450px">
+            <p style="font-size:14px;letter-spacing: 1px;line-height: 30px">　　现在，人们如果能生活在一个宁静幽雅的环境里，那已经是不可能的事了。环境的污染，尤其是噪音的污染，其实早已给人们敲响了警钟，可是人们却仍是视而不见、听而不觉，给环境和身心都带来隐形而慢性的创伤。噪音污染的治理是迫不及待的，既要求国家的引导投入，也需要我们公民的大力支持。除此之外我们还需要学会在噪声污染中保护自己。 <br> <br>　　那么，作为普通居民，应该怎样维护自己的生活中的安宁与舒适？有关专家指出，首先要明确自己的权益，例如北京市规定法定休息日、节假日全天及工作日12时至14时、18时至次日8时，禁止在居民住宅楼内进行有噪声的装修；其次，如遇噪声问题，可拨打环保部12369热线进行举报；同时公民也要加强自律，从自身做起，提升环境公德意识。
+
+            </p>
+
+        </div>
+
+
+
+</body>
+
+</html>
